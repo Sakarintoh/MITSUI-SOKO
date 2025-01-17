@@ -126,6 +126,6 @@ app.get('/information', (req, res) => {
     res.json({ hostName, userIP });
   });
 // Start the server
-app.listen(5000, '192.168.5.77', () => {
+app.listen(5000, '0.0.0.0', () => {
   console.log('Server is running on port 5000');
 });
