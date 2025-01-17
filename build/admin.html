@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #043597af;
+    }
+    .container {
+      margin: 20px auto;
+      max-width: 800px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      font-weight: bold;
+    }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #043597af;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #3965bbaf;
+    }
+    .message {
+      padding: 10px;
+      background-color: #f4f4f4;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+    .messages-list {
+      margin-top: 20px;
+    }
+    .section-footer {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Admin Dashboard</h1>
+    
+    <!-- Form to Save Announcement -->
+    <div class="form-group">
+      <label for="announcement-it">IT Announcement</label>
+      <textarea id="announcement-it" placeholder="Enter IT announcement"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="announcement-ga">GA Announcement</label>
+      <textarea id="announcement-ga" placeholder="Enter GA announcement"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="announcement-hr">HR Announcement</label>
+      <textarea  id="announcement-hr" placeholder="Enter HR announcement"></textarea>
+    </div>
+    <div class="section-footer">
+      <div class="form-group">
+        <label for="announcement-password">Password for Announcements</label>
+        <input type="password" id="announcement-password" placeholder="Enter password for announcements" />
+      </div>
+      <button onclick="saveAnnouncement()">Save Announcement</button>
+    </div>
+
+    <!-- Form to Save Informational Text -->
+    <div class="form-group">
+      <br><label for="information-text">Information Text</label></br>
+      <textarea id="information-text" placeholder="Enter informational text"></textarea>
+    </div>
+    <div class="section-footer">
+      <div class="form-group">
+        <label for="information-password">Password for Information</label>
+        <input type="password" id="information-password" placeholder="Enter password for information" />
+      </div>
+      <button onclick="saveInformation()">Save Information</button>
+    </div>
+
+    <!-- Form to View Chat History -->
+    <div class="section-footer">
+      <div class="form-group">
+        <label for="chat-history-password">Password for Chat History</label>
+        <input type="password" id="chat-history-password" placeholder="Enter password for chat history" />
+      </div>
+      <button onclick="fetchMessages()">View Chat History</button>
+    </div>
+
+    <!-- Messages List -->
+    <h2>Chat History</h2>
+    <div class="messages-list" id="messages-list"></div>
+
+    <!-- Back to Home Button -->
+    <div class="section-footer">
+      <button onclick="goHome()">Back to Home</button>
+    </div>
+  </div>
+
+  <script>
+    // Function to fetch and display messages
+    function fetchMessages() {
+      const password = document.getElementById('chat-history-password').value;
+
+      // Verify password before fetching chat history
+      if (password !== 'admin123') {
+        alert('Incorrect password for chat history');
+        return;
+      }
+
+      fetch('http://localhost:5000/messages')
+        .then(response => response.json())
+        .then(messages => {
+          const messagesList = document.getElementById('messages-list');
+          messagesList.innerHTML = '';
+          messages.forEach(message => {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.innerHTML = `<strong>${message.username}:</strong> ${message.message}`;
+            messagesList.appendChild(messageElement);
+          });
+        })
+        .catch(error => console.error('Error fetching messages:', error));
+    }
+
+    // Function to save announcement
+    function saveAnnouncement() {
+      const password = document.getElementById('announcement-password').value;
+      const IT = document.getElementById('announcement-it').value;
+      const GA = document.getElementById('announcement-ga').value;
+      const HR = document.getElementById('announcement-hr').value;
+
+      // Verify password before saving announcement
+      if (password !== 'admin123') {
+        alert('Incorrect password for announcements');
+        return;
+      }
+
+      fetch('http://localhost:5000/api/save-announcement', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          announcements: { IT, GA, HR },
+          password,
+        }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert(data.message);
+          } else {
+            alert(data.message);
+          }
+        })
+        .catch(error => console.error('Error saving announcement:', error));
+    }
+
+    // Function to save information
+    function saveInformation() {
+      const password = document.getElementById('information-password').value;
+      const information = document.getElementById('information-text').value;
+
+      // Verify password before saving information
+      if (password !== 'admin123') {
+        alert('Incorrect password for information');
+        return;
+      }
+
+      fetch('http://localhost:5000/api/save-information', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          information,
+          password,
+        }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert(data.message);
+          } else {
+            alert(data.message);
+          }
+        })
+        .catch(error => console.error('Error saving information:', error));
+    }
+
+    // Function to navigate back to home page (App.js)
+    function goHome() {
+      window.location.href = "/"; // or use the specific URL of your home page
+    }
+  </script>
+</body>
+</html>
