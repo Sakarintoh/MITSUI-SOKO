@@ -6,15 +6,15 @@ const os = require('os');
 
 // Initialize the express app
 const app = express();
-const port = process.env.PORT || 5000; // Use environment variable for port (or default to 5000)
+const port = 5000;
 
 // Use middleware
-app.use(cors()); // CORS should be properly configured to allow external requests
+app.use(cors());
 app.use(express.json());
 
 // Create MySQL connection
 const db = mysql.createConnection({
-  host: 'localhost', // Replace with your MySQL server IP if needed
+  host: 'localhost',
   user: 'root',  // Replace with your MySQL username
   password: '',  // Replace with your MySQL password
   database: 'chat_app'
@@ -89,7 +89,8 @@ app.get('/announcement', (req, res) => {
         res.json(result.length > 0 ? result[0] : { announcement: 'No announcements available' });
       }
     });
-});
+  });
+  
 
 // API to save informational texts
 app.post('/api/save-information', (req, res) => {
@@ -118,16 +119,14 @@ app.get('/information', (req, res) => {
         res.json(result.length > 0 ? result[0] : { information: 'No information available' });
       }
     });
-});
-
-// API to get the hostname and user IP
-app.get('/get-hostname', (req, res) => {
-    const hostName = os.hostname(); // Get the server's hostname
-    const userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // Get the user's IP
+  });
+  
+  app.get('/get-hostname', (req, res) => {
+    const hostName = os.hostname(); // ดึงชื่อ Host ของเซิร์ฟเวอร์
+    const userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // ดึง IP ของผู้ใช้
     res.json({ hostName, userIP });
-});
-
-// Start the server to accept external connections
-app.listen(port, '0.0.0.0', () => {  // Listen on all interfaces
-  console.log(`Server is running on port ${port}`);
+  });
+// Start the server
+app.listen(5000, '0.0.0.0', () => {
+  console.log('Server is running on port 5000');
 });

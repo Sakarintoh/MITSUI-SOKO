@@ -3,7 +3,8 @@ import logo from './Logo White MST.png';
 import './App.css';
 
 function App() {
-  const serverURL = process.env.REACT_APP_SERVER_URL; // อ่าน URL จาก .env
+  // กำหนด URL ของเซิร์ฟเวอร์โดยตรงในโค้ด
+  const serverURL = 'http://localhost:5000'; // เปลี่ยนเป็น URL เซิร์ฟเวอร์ของคุณ
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
   const [information, setInformation] = useState('');
@@ -101,18 +102,10 @@ function App() {
         <section id="section-2" className="section">
           <h1>Announcement</h1>
           <div className="buttons-section2">
-            <button className="btn-section2" onClick={() => handleShowAnnouncement('all')}>
-              <img src="house.png" alt="logo" />
-            </button>
-            <button className="btn-section2" onClick={() => handleShowAnnouncement('IT')}>
-              <img src="it.png" alt="logo" />
-            </button>
-            <button className="btn-section2" onClick={() => handleShowAnnouncement('GA')}>
-              <img src="GA.png" alt="logo" />
-            </button>
-            <button className="btn-section2" onClick={() => handleShowAnnouncement('HR')}>
-              <img src="hr-manager.png" alt="logo" />
-            </button>
+            <button className="btn-section2" onClick={() => handleShowAnnouncement('all')} />
+            <button className="btn-section2" onClick={() => handleShowAnnouncement('IT')} />
+            <button className="btn-section2" onClick={() => handleShowAnnouncement('GA')} />
+            <button className="btn-section2" onClick={() => handleShowAnnouncement('HR')} />
           </div>
           <div className="announcement-content">
             {selectedAnnouncement === 'all' && (
@@ -147,18 +140,14 @@ function App() {
         </section>
 
         <section id="section-3" className="section">
-          <h1>Information
-            <img src="idea.png" alt="Logo" className="info-logo" />
-          </h1>
+          <h1>Information</h1>
           <div className="information-box">
             <p>{information || 'No information available.'}</p>
           </div>
         </section>
 
         <section id="section-4" className="section">
-          <h1>Chat
-            <img src="speak.png" alt="Logo" className="info-logo" />
-          </h1>
+          <h1>Chat</h1>
           <div className="chat-container">
             <div className="chat-box">
               {messages.map((msg, index) => (
