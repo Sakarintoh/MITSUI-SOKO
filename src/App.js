@@ -3,7 +3,7 @@ import logo from './Logo White MST.png';
 import './App.css';
 
 function App() {
-  const serverURL = 'http://192.168.105.119:5000'; // URL เซิร์ฟเวอร์
+  const serverURL = 'http://localhost:5000'; // URL เซิร์ฟเวอร์
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
   const [information, setInformation] = useState('');
