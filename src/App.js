@@ -3,7 +3,8 @@ import logo from './Logo White MST.png';
 import './App.css';
 
 function App() {
-  const serverURL = 'http://192.168.105.119:5000'; // URL เซิร์ฟเวอร์
+  // กำหนด URL ของเซิร์ฟเวอร์โดยตรงในโค้ด
+  const serverURL = 'http://192.168.105.119:5000'; // เปลี่ยนเป็น URL เซิร์ฟเวอร์ของคุณ
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
   const [information, setInformation] = useState('');
@@ -101,10 +102,10 @@ function App() {
         <section id="section-2" className="section">
           <h1>Announcement</h1>
           <div className="buttons-section2">
-            <button className="btn-section2" onClick={() => handleShowAnnouncement('all')}>All</button>
-            <button className="btn-section2" onClick={() => handleShowAnnouncement('IT')}>IT</button>
-            <button className="btn-section2" onClick={() => handleShowAnnouncement('GA')}>GA</button>
-            <button className="btn-section2" onClick={() => handleShowAnnouncement('HR')}>HR</button>
+            <button className="btn-section2" onClick={() => handleShowAnnouncement('all')} />
+            <button className="btn-section2" onClick={() => handleShowAnnouncement('IT')} />
+            <button className="btn-section2" onClick={() => handleShowAnnouncement('GA')} />
+            <button className="btn-section2" onClick={() => handleShowAnnouncement('HR')} />
           </div>
           <div className="announcement-content">
             {selectedAnnouncement === 'all' && (
