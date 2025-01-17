@@ -3,6 +3,7 @@ import logo from './Logo White MST.png';
 import './App.css';
 
 function App() {
+  const serverURL = process.env.REACT_APP_SERVER_URL; // อ่าน URL จาก .env
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
   const [information, setInformation] = useState('');
@@ -15,15 +16,13 @@ function App() {
   const [selectedAnnouncement, setSelectedAnnouncement] = useState('all');
 
   // ฟังก์ชันเพื่อเปลี่ยนแสดงข้อความตามหัวข้อที่เลือก
-
   const handleShowAnnouncement = (section) => {
     setSelectedAnnouncement(section);
   };
 
-
   useEffect(() => {
     // ดึงข้อมูล Host Name หรือ IP Address ของผู้ใช้
-    fetch('http://localhost:5000/get-hostname')
+    fetch(`${serverURL}/get-hostname`)
       .then((response) => response.json())
       .then((data) => {
         setUsername(data.hostName || data.userIP || 'Unknown User'); // ใช้ Host Name หรือ IP
@@ -31,13 +30,13 @@ function App() {
       .catch((error) => console.error('Error fetching host name:', error));
 
     // ดึงข้อความแชท
-    fetch('http://localhost:5000/messages')
+    fetch(`${serverURL}/messages`)
       .then((response) => response.json())
       .then((data) => setMessages(data))
       .catch((error) => console.error('Error fetching messages:', error));
 
     // ดึงประกาศ
-    fetch('http://localhost:5000/announcement')
+    fetch(`${serverURL}/announcement`)
       .then((response) => response.json())
       .then((data) => {
         setAnnouncement({
@@ -49,17 +48,17 @@ function App() {
       .catch((error) => console.error('Error fetching announcement:', error));
 
     // ดึงข้อมูล
-    fetch('http://localhost:5000/information')
+    fetch(`${serverURL}/information`)
       .then((response) => response.json())
       .then((data) => {
         setInformation(data.text || 'No information available.');
       })
       .catch((error) => console.error('Error fetching information:', error));
-  }, []);
+  }, [serverURL]);
 
   const sendMessage = () => {
     if (message.trim() !== '') {
-      fetch('http://localhost:5000/messages', {
+      fetch(`${serverURL}/messages`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, message }),
@@ -92,90 +91,73 @@ function App() {
             <button className="navbar-btn" onClick={() => navigateToSection('section-3')}>Information</button>
             <button className="navbar-btn" onClick={() => navigateToSection('section-4')}>Chat</button>
             <a href="/admin.html" target="_blank" rel="noopener noreferrer">
-              <button className="navbar-btn"> Admin </button>
+              <button className="navbar-btn">Admin</button>
             </a>
           </div>
         </div>
       </header>
 
       <main>
-      <section id="section-2" className="section">
-      <h1>Announcement</h1>
-      <div className="buttons-section2">
-        {/* ปุ่มแยกแต่ละหัวข้อ */}
-        <button className="btn-section2" onClick={() => handleShowAnnouncement('all')}>
-        <img src="house.png" alt="logo" />
-        </button>
-        <button className="btn-section2" onClick={() => handleShowAnnouncement('IT')}>
-        <img src="it.png" alt="logo" />
-        </button>
-        <button className="btn-section2" onClick={() => handleShowAnnouncement('GA')}>
-        <img src="GA.png" alt="logo" />
-        </button>
-        <button className="btn-section2" onClick={() => handleShowAnnouncement('HR')}>
-        <img src="hr-manager.png" alt="logo" />
-        </button>
-      </div>
-      <div className="announcement-content">
-      <div className="annuoncement-box">
-        {/* แสดงข้อความทั้งหมด */}
-        {selectedAnnouncement === 'all' && (
-          <div>
-            <h2>IT</h2>
-            <p>{announcement.IT}</p>
-
-            <h2>GA</h2>
-            <p>{announcement.GA}</p>
-
-            <h2>HR</h2>
-            <p>{announcement.HR}</p>
+        <section id="section-2" className="section">
+          <h1>Announcement</h1>
+          <div className="buttons-section2">
+            <button className="btn-section2" onClick={() => handleShowAnnouncement('all')}>
+              <img src="house.png" alt="logo" />
+            </button>
+            <button className="btn-section2" onClick={() => handleShowAnnouncement('IT')}>
+              <img src="it.png" alt="logo" />
+            </button>
+            <button className="btn-section2" onClick={() => handleShowAnnouncement('GA')}>
+              <img src="GA.png" alt="logo" />
+            </button>
+            <button className="btn-section2" onClick={() => handleShowAnnouncement('HR')}>
+              <img src="hr-manager.png" alt="logo" />
+            </button>
           </div>
-        )}
-         {/* แสดงข้อความทั้งหมด */}
-        {selectedAnnouncement === 'all' && (
-          <div>
-            <p>{announcement.all}</p>
+          <div className="announcement-content">
+            {selectedAnnouncement === 'all' && (
+              <div>
+                <h2>IT</h2>
+                <p>{announcement.IT}</p>
+                <h2>GA</h2>
+                <p>{announcement.GA}</p>
+                <h2>HR</h2>
+                <p>{announcement.HR}</p>
+              </div>
+            )}
+            {selectedAnnouncement === 'IT' && (
+              <div>
+                <h2>IT</h2>
+                <p>{announcement.IT}</p>
+              </div>
+            )}
+            {selectedAnnouncement === 'GA' && (
+              <div>
+                <h2>GA</h2>
+                <p>{announcement.GA}</p>
+              </div>
+            )}
+            {selectedAnnouncement === 'HR' && (
+              <div>
+                <h2>HR</h2>
+                <p>{announcement.HR}</p>
+              </div>
+            )}
           </div>
-        )}
-          {/* แสดงข้อความ IT */}
-        {selectedAnnouncement === 'IT' && (
-          <div>
-            <h2>IT</h2>
-            <p>{announcement.IT}</p>
-          </div>
-        )}
-          {/* แสดงข้อความ GA */}
-        {selectedAnnouncement === 'GA' && (
-          <div>
-            <h2>GA</h2>
-            <p>{announcement.GA}</p>
-          </div>
-        )}
-          {/* แสดงข้อความ HR */}
-        {selectedAnnouncement === 'HR' && (
-          <div>
-            <h2>HR</h2>
-            <p>{announcement.HR}</p>
-          </div>
-        )}
-      </div>
-      </div>
-    </section>
+        </section>
 
         <section id="section-3" className="section">
           <h1>Information
-          <img src="idea.png" alt="Logo" className="info-logo" />
+            <img src="idea.png" alt="Logo" className="info-logo" />
           </h1>
-          <div className="information-content">
           <div className="information-box">
             <p>{information || 'No information available.'}</p>
-          </div>
           </div>
         </section>
 
         <section id="section-4" className="section">
           <h1>Chat
-          <img src="speak.png" alt="Logo" className="info-logo" />
+            <img src="speak.png" alt="Logo" className="info-logo" />
           </h1>
           <div className="chat-container">
             <div className="chat-box">
