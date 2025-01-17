@@ -4,7 +4,7 @@ import './App.css';
 
 function App() {
   // กำหนด URL ของเซิร์ฟเวอร์โดยตรงในโค้ด
-  const serverURL = 'http://localhost:5000'; // เปลี่ยนเป็น URL เซิร์ฟเวอร์ของคุณ
+  const serverURL = 'http://192.168.105.119:5000'; // เปลี่ยนเป็น URL เซิร์ฟเวอร์ของคุณ
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
   const [information, setInformation] = useState('');
