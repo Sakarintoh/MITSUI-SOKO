@@ -123,7 +123,7 @@ app.get('/information', (req, res) => {
   
   app.get('/get-hostname', (req, res) => {
     const hostName = os.hostname(); // ดึงชื่อ Host ของเซิร์ฟเวอร์
-    const userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // ดึง IP ของผู้ใช้
+    const userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // ดึง IP ผู้ใช้
     res.json({ hostName, userIP });
   });
 // Start the server
