@@ -11,12 +11,13 @@ const port = 5000;
 // Use middleware
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.json());
 
 // Create MySQL connection
 const db = mysql.createConnection({
   host: 'localhost',
-  user: 'root',  // Replace with your MySQL username
-  password: '',  // Replace with your MySQL password
+  user: 'root', // Replace with your MySQL username
+  password: '', // Replace with your MySQL password
   database: 'chat_app'
 });
 
@@ -58,75 +59,75 @@ app.post('/messages', (req, res) => {
   });
 });
 
-// Use bodyParser to handle JSON data
-app.use(bodyParser.json());
-
 // API to save announcements
 app.post('/api/save-announcement', (req, res) => {
-    const { announcements, password } = req.body;
+  const { announcements, password } = req.body;
 
-    const correctPassword = "admin123";
-    if (password !== correctPassword) {
-        return res.status(401).json({ success: false, message: "Incorrect password" });
+  const correctPassword = 'admin123';
+  if (password !== correctPassword) {
+    return res.status(401).json({ success: false, message: 'Incorrect password' });
+  }
+
+  const { IT, GA, HR } = announcements;
+  const query = 'INSERT INTO announcements (IT, GA, HR) VALUES (?, ?, ?)';
+  db.query(query, [IT, GA, HR], (err, result) => {
+    if (err) {
+      return res.status(500).json({ success: false, message: 'Error saving announcement' });
     }
-
-    const { IT, GA, HR } = announcements;
-    const query = 'INSERT INTO announcements (IT, GA, HR) VALUES (?, ?, ?)';
-    db.query(query, [IT, GA, HR], (err, result) => {
-        if (err) {
-            return res.status(500).json({ success: false, message: 'Error saving announcement' });
-        }
-        res.json({ success: true, message: 'Announcement saved successfully' });
-    });
+    res.json({ success: true, message: 'Announcement saved successfully' });
+  });
 });
 
+// API to get the latest announcement
 app.get('/announcement', (req, res) => {
-    const query = 'SELECT * FROM announcements ORDER BY timestamp DESC LIMIT 1';
-    db.query(query, (err, result) => {
-      if (err) {
-        res.status(500).json({ success: false, message: 'Error retrieving announcement' });
-      } else {
-        res.json(result.length > 0 ? result[0] : { announcement: 'No announcements available' });
-      }
-    });
+  const query = 'SELECT * FROM announcements ORDER BY timestamp DESC LIMIT 1';
+  db.query(query, (err, result) => {
+    if (err) {
+      res.status(500).json({ success: false, message: 'Error retrieving announcement' });
+    } else {
+      res.json(result.length > 0 ? result[0] : { announcement: 'No announcements available' });
+    }
   });
-  
+});
 
 // API to save informational texts
 app.post('/api/save-information', (req, res) => {
-    const { information, password } = req.body;
+  const { information, password } = req.body;
 
-    const correctPassword = "admin123";
-    if (password !== correctPassword) {
-        return res.status(401).json({ success: false, message: "Incorrect password" });
+  const correctPassword = 'admin123';
+  if (password !== correctPassword) {
+    return res.status(401).json({ success: false, message: 'Incorrect password' });
+  }
+
+  const query = 'INSERT INTO information (text) VALUES (?)';
+  db.query(query, [information], (err, result) => {
+    if (err) {
+      return res.status(500).json({ success: false, message: 'Error saving information' });
     }
-
-    const query = 'INSERT INTO information (text) VALUES (?)';
-    db.query(query, [information], (err, result) => {
-        if (err) {
-            return res.status(500).json({ success: false, message: 'Error saving information' });
-        }
-        res.json({ success: true, message: 'Information saved successfully' });
-    });
+    res.json({ success: true, message: 'Information saved successfully' });
+  });
 });
 
+// API to get the latest information
 app.get('/information', (req, res) => {
-    const query = 'SELECT * FROM information ORDER BY timestamp DESC LIMIT 1';
-    db.query(query, (err, result) => {
-      if (err) {
-        res.status(500).json({ success: false, message: 'Error retrieving information' });
-      } else {
-        res.json(result.length > 0 ? result[0] : { information: 'No information available' });
-      }
-    });
+  const query = 'SELECT * FROM information ORDER BY timestamp DESC LIMIT 1';
+  db.query(query, (err, result) => {
+    if (err) {
+      res.status(500).json({ success: false, message: 'Error retrieving information' });
+    } else {
+      res.json(result.length > 0 ? result[0] : { information: 'No information available' });
+    }
   });
-  
-  app.get('/get-hostname', (req, res) => {
-    const hostName = os.hostname(); // ดึงชื่อ Host ของเซิร์ฟเวอร์
-    const userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // ดึง IP ของผู้ใช้
-    res.json({ hostName, userIP });
-  });
+});
+
+// API to get hostname and user IP
+app.get('/get-hostname', (req, res) => {
+  const hostName = os.hostname();
+  const userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  res.json({ hostName, userIP });
+});
+
 // Start the server
-app.listen(5000, '0.0.0.0', () => {
-  console.log('Server is running on port 5000');
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server is running on http://localhost:${port}`);
 });
