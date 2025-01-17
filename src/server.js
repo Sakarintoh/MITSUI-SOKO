@@ -6,7 +6,6 @@ const os = require('os');
 
 // Initialize the express app
 const app = express();
-const port = 5000;
 
 // Use middleware
 app.use(cors());
