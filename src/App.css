@@ -1,0 +1,329 @@
+/* General Styles */
+.App {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.App-header {
+  background-color: #93d7ffcd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: black;
+  min-height: 100vh;
+}
+
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #043597af;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 45px;
+  padding: 10px 20px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.App-logo {
+ 
+  animation: App-logo-spin infinite 20s linear; /* เพิ่ม animation หมุนโลโก้ */
+  height: 40px;
+  margin-right: 10px;
+}
+
+.logo-text {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.navbar-buttons {
+  display: flex;
+  gap: 15px;
+  margin-right: 30px;
+}
+
+.navbar-btn {
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 15px 20px;
+  transition: background-color 0.3s ease;
+  border-radius: 8px; /* ทำมุมปุ่มให้มน */
+}
+
+.navbar-btn:hover {
+  background-color: #a5d1ffda;
+  transform: translateY(-5px); /* เพิ่ม effect ยกปุ่มเมื่อ hover */
+}
+
+.navbar-btn:focus {
+  outline: none;
+}
+
+#section-2 {
+  background-image: url('section2.jpg'); /* ระบุที่อยู่ของไฟล์รูปภาพ */
+  background-size: cover;
+  overflow-y: auto; /* เปิดใช้งาน scroll ในแนวตั้ง */
+  height: 100vh; /* ทำให้แต่ละส่วนเต็มจอ */
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: top;
+  font-size: calc(10px + 2vmin);
+  color: rgb(0, 0, 0);
+}
+
+#section-3 {
+  overflow-y: auto; /* เปิดใช้งาน scroll ในแนวตั้ง */
+  background-image: url('section3.jpg'); /* ระบุที่อยู่ของไฟล์รูปภาพ */
+  background-size: cover;
+  height: 100vh; /* ทำให้แต่ละส่วนเต็มจอ */
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: top;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+#section-4 {
+  background-image: url('section4.jpg'); /* ระบุที่อยู่ของไฟล์รูปภาพ */
+  background-size: cover;
+  height: 100vh; /* ทำให้แต่ละส่วนเต็มจอ */
+  flex-direction: column;
+  align-items: left;
+  justify-content: top;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+/* Main Content */
+main {
+  background-color: #3965bbaf;
+  padding: 80px;
+}
+
+.section {
+  padding: 40px;
+  margin: 80px 0;
+  border-radius: 10px;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #333;
+  text-align: left;
+}
+
+p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+/* เพิ่มสไตล์สำหรับช่องแชท */
+.chat-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+}
+
+.chat-box {
+  background-color: #ffffff;
+  max-height: 400px;
+  overflow-y: auto;  /* เพิ่มการเลื่อนเมื่อล้นจากกล่อง */
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+
+.chat-message {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #e2e2e2;
+  border-radius: 5px;
+  max-width: 80%;
+  word-wrap: break-word; /* ตัดข้อความที่ยาวเกินไปขึ้นบรรทัดใหม่ */
+  white-space: normal; /* ทำให้ข้อความสามารถตัดบรรทัดได้ */
+}
+
+.chat-message p {
+  margin: 0;
+}
+
+.chat-input-container {
+  display: flex;
+  align-items: center;
+}
+
+.chat-input {
+  flex-grow: 1;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.send-btn {
+  padding: 10px 20px;
+  background-color: #043597;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.send-btn:hover {
+  background-color: #03509a;
+}
+
+.announcement-content {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  overflow-y: auto; /* เปิดใช้งาน scroll ในแนวตั้ง */
+  margin-top: 20px;
+}
+
+
+.information-content {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  overflow-y: auto; /* เปิดใช้งาน scroll ในแนวตั้ง */
+}
+
+.information-box {
+  background-color: #ffffff;
+  max-height: 400px;
+  padding: 10px;
+  border-radius: 8px;
+
+}
+
+.announcement-box {
+  background-color: #ffffff;
+  max-height: 400px;
+  padding: 10px;
+  border-radius: 8px;
+  
+}
+
+.info-logo {
+  height: 50px; /* ปรับขนาดโลโก้ */
+  margin-left: 8px; /* เพิ่มช่องว่างระหว่างคำกับโลโก้ */
+}
+
+.buttons-section2 {
+  display: flex;
+  align-items: flex-start; /* จัดปุ่มชิดซ้าย */
+  gap: 15px; /* เพิ่มช่องว่างระหว่างปุ่ม */
+  top: 20px; /* ระยะห่างจากด้านบน */
+  left: 20px; /* ระยะห่างจากด้านซ้าย */
+}
+
+.btn-section2 {
+  padding: 12px 20px; /* กำหนดขนาด padding ของปุ่ม */
+  background-color: transparent; /* ทำให้พื้นหลังของปุ่มเป็นโปร่งใส */
+  color: white; /* สีข้อความในปุ่ม */
+  border: none; /* ไม่มีขอบปุ่ม */
+  border-radius: 8px; /* ทำมุมปุ่มให้มน */
+  cursor: pointer; /* แสดง cursor แบบมือ */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* เพิ่มการเปลี่ยนสีเมื่อ hover และ effect เมื่อกด */
+  width: 100px; /* กำหนดความกว้างของปุ่ม */
+}
+
+.btn-section2:hover {
+  background-color: #3965bb; /* เปลี่ยนสีเมื่อ hover */
+  transform: translateY(-5px); /* เพิ่ม effect ยกปุ่มเมื่อ hover */
+}
+
+.btn-section2 img {
+  width: 30px; /* ขนาดของโลโก้ */
+  height: 30px; /* ขนาดของโลโก้ */
+  margin-left: 8px; /* เพิ่มช่องว่างระหว่างข้อความและโลโก้ */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .chat-container {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .chat-input {
+    font-size: 0.9rem;
+  }
+
+  .send-btn {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .logo-text {
+    font-size: 1.2rem;
+  }
+
+  .navbar-btn {
+    font-size: 1rem;
+    padding: 8px 15px;
+  }
+  
+  .navbar-buttons {
+    gap: 10px;
+  }
+  
+  .top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+    height: auto;
+  }
+
+  .navbar-btn {
+    width: 100%; /* Full width buttons on mobile */
+    padding: 12px 0;
+    text-align: center;
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg); /* เริ่มต้นที่การหมุน 0 องศา */
+  }
+  to {
+    transform: rotate(360deg); /* หมุนจนถึง 360 องศา */
+  }
+}
