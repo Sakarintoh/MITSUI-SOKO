@@ -9,7 +9,9 @@ const app = express();
 const port = 5000;
 
 // Use middleware
-app.use(cors());
+app.use(cors({
+  origin: '*', // หรือระบุเฉพาะโดเมน/ไอพีที่อนุญาต เช่น ['http://192.168.1.100']
+}));
 app.use(express.json());
 
 // Create MySQL connection
