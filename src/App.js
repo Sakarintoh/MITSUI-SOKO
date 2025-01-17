@@ -102,10 +102,18 @@ function App() {
         <section id="section-2" className="section">
           <h1>Announcement</h1>
           <div className="buttons-section2">
-            <button className="btn-section2" onClick={() => handleShowAnnouncement('all')} />
-            <button className="btn-section2" onClick={() => handleShowAnnouncement('IT')} />
-            <button className="btn-section2" onClick={() => handleShowAnnouncement('GA')} />
-            <button className="btn-section2" onClick={() => handleShowAnnouncement('HR')} />
+          <button className="btn-section2" onClick={() => handleShowAnnouncement('all')}>
+  <img src="house.png" alt="All" className="btn-logo" /> 
+</button>
+<button className="btn-section2" onClick={() => handleShowAnnouncement('IT')}>
+  <img src="it.png" alt="IT" className="btn-logo" /> 
+</button>
+<button className="btn-section2" onClick={() => handleShowAnnouncement('GA')}>
+  <img src="GA.png" alt="GA" className="btn-logo" /> 
+</button>
+<button className="btn-section2" onClick={() => handleShowAnnouncement('HR')}>
+  <img src="hr-manager.png" alt="HR" className="btn-logo" /> 
+</button>
           </div>
           <div className="announcement-content">
             {selectedAnnouncement === 'all' && (
