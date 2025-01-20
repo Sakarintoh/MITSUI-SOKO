@@ -37,7 +37,7 @@ function App() {
       .catch((error) => console.error('Error fetching messages:', error));
 
     // ดึงประกาศ
-    fetch('http://localhost:5000/announcement')
+    fetch('http://192.168.7.94:5000/announcement')
       .then((response) => response.json())
       .then((data) => {
         setAnnouncement({
