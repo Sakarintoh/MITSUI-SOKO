@@ -16,7 +16,7 @@ app.use(express.json());
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',  // Replace with your MySQL username
-  password: '12345678',  // Replace with your MySQL password
+  password: '',  // Replace with your MySQL password
   database: 'chat_app'
 });
 
