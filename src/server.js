@@ -1,3 +1,4 @@
+require('dotenv').config(); // โหลด environment variables
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
@@ -6,7 +7,7 @@ const os = require('os');
 
 // Initialize the express app
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000; // ใช้พอร์ตจาก environment หรือ 5000 ถ้าไม่มี
 
 // Use middleware
 app.use(cors());
@@ -14,10 +15,10 @@ app.use(express.json());
 
 // Create MySQL connection
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',  // Replace with your MySQL username
-  password: '',  // Replace with your MySQL password
-  database: 'chat_app'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 });
 
 // Connect to the database
@@ -30,18 +31,17 @@ db.connect((err) => {
 });
 
 // Route to get all messages
-app.get('/messages', (req, res) => {
-  db.query('SELECT * FROM messages ORDER BY timestamp ASC', (err, result) => {
-    if (err) {
-      res.status(500).send('Error retrieving messages');
-    } else {
-      res.json(result);
-    }
-  });
+app.get('/messages', async (req, res) => {
+  try {
+    const [result] = await db.promise().query('SELECT * FROM messages ORDER BY timestamp ASC');
+    res.json(result);
+  } catch (err) {
+    res.status(500).send('Error retrieving messages');
+  }
 });
 
 // Route to add a new message
-app.post('/messages', (req, res) => {
+app.post('/messages', async (req, res) => {
   const { username, message } = req.body;
 
   if (!username || !message) {
@@ -49,84 +49,78 @@ app.post('/messages', (req, res) => {
   }
 
   const query = 'INSERT INTO messages (username, message) VALUES (?, ?)';
-  db.query(query, [username, message], (err, result) => {
-    if (err) {
-      res.status(500).send('Error inserting message');
-    } else {
-      res.status(201).send('Message sent');
-    }
-  });
+  try {
+    await db.promise().query(query, [username, message]);
+    res.status(201).send('Message sent');
+  } catch (err) {
+    res.status(500).send('Error inserting message');
+  }
 });
-
-// Use bodyParser to handle JSON data
-app.use(bodyParser.json());
 
 // API to save announcements
-app.post('/api/save-announcement', (req, res) => {
-    const { announcements, password } = req.body;
+app.post('/api/save-announcement', async (req, res) => {
+  const { announcements, password } = req.body;
 
-    const correctPassword = "admin123";
-    if (password !== correctPassword) {
-        return res.status(401).json({ success: false, message: "Incorrect password" });
-    }
+  const correctPassword = "admin123";
+  if (password !== correctPassword) {
+    return res.status(401).json({ success: false, message: "Incorrect password" });
+  }
 
-    const { IT, GA, HR } = announcements;
-    const query = 'INSERT INTO announcements (IT, GA, HR) VALUES (?, ?, ?)';
-    db.query(query, [IT, GA, HR], (err, result) => {
-        if (err) {
-            return res.status(500).json({ success: false, message: 'Error saving announcement' });
-        }
-        res.json({ success: true, message: 'Announcement saved successfully' });
-    });
+  const { IT, GA, HR } = announcements;
+  const query = 'INSERT INTO announcements (IT, GA, HR) VALUES (?, ?, ?)';
+  try {
+    await db.promise().query(query, [IT, GA, HR]);
+    res.json({ success: true, message: 'Announcement saved successfully' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Error saving announcement' });
+  }
 });
 
-app.get('/announcement', (req, res) => {
-    const query = 'SELECT * FROM announcements ORDER BY timestamp DESC LIMIT 1';
-    db.query(query, (err, result) => {
-      if (err) {
-        res.status(500).json({ success: false, message: 'Error retrieving announcement' });
-      } else {
-        res.json(result.length > 0 ? result[0] : { announcement: 'No announcements available' });
-      }
-    });
-  });
-  
+app.get('/announcement', async (req, res) => {
+  const query = 'SELECT * FROM announcements ORDER BY timestamp DESC LIMIT 1';
+  try {
+    const [result] = await db.promise().query(query);
+    res.json(result.length > 0 ? result[0] : { announcement: 'No announcements available' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Error retrieving announcement' });
+  }
+});
 
 // API to save informational texts
-app.post('/api/save-information', (req, res) => {
-    const { information, password } = req.body;
+app.post('/api/save-information', async (req, res) => {
+  const { information, password } = req.body;
 
-    const correctPassword = "admin123";
-    if (password !== correctPassword) {
-        return res.status(401).json({ success: false, message: "Incorrect password" });
-    }
+  const correctPassword = "admin123";
+  if (password !== correctPassword) {
+    return res.status(401).json({ success: false, message: "Incorrect password" });
+  }
 
-    const query = 'INSERT INTO information (text) VALUES (?)';
-    db.query(query, [information], (err, result) => {
-        if (err) {
-            return res.status(500).json({ success: false, message: 'Error saving information' });
-        }
-        res.json({ success: true, message: 'Information saved successfully' });
-    });
+  const query = 'INSERT INTO information (text) VALUES (?)';
+  try {
+    await db.promise().query(query, [information]);
+    res.json({ success: true, message: 'Information saved successfully' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Error saving information' });
+  }
 });
 
-app.get('/information', (req, res) => {
-    const query = 'SELECT * FROM information ORDER BY timestamp DESC LIMIT 1';
-    db.query(query, (err, result) => {
-      if (err) {
-        res.status(500).json({ success: false, message: 'Error retrieving information' });
-      } else {
-        res.json(result.length > 0 ? result[0] : { information: 'No information available' });
-      }
-    });
-  });
-  
-  app.get('/get-hostname', (req, res) => {
-    const hostName = os.hostname(); // ดึงชื่อ Host ของเซิร์ฟเวอร์
-    const userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // ดึง IP ของผู้ใช้
-    res.json({ hostName, userIP });
-  });
+app.get('/information', async (req, res) => {
+  const query = 'SELECT * FROM information ORDER BY timestamp DESC LIMIT 1';
+  try {
+    const [result] = await db.promise().query(query);
+    res.json(result.length > 0 ? result[0] : { information: 'No information available' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Error retrieving information' });
+  }
+});
+
+app.get('/get-hostname', (req, res) => {
+  const hostName = os.hostname(); // ดึงชื่อ Host ของเซิร์ฟเวอร์
+  const userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // ดึง IP ของผู้ใช้
+  res.json({ hostName, userIP });
+});
+
 // Start the server
-app.listen(5000, '0.0.0.0', () => {
-  console.log('Server is running on port 5000');
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server is running on port ${port}`);
 });
