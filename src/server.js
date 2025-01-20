@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
@@ -7,18 +6,18 @@ const os = require('os');
 
 // Initialize the express app
 const app = express();
-const port = process.env.PORT || 5000;  // ใช้ PORT จาก .env ถ้ามี
+const port = 5000;
 
 // Use middleware
 app.use(cors());
 app.use(express.json());
 
-// Create MySQL connection using environment variables
+// Create MySQL connection
 const db = mysql.createConnection({
-  host: process.env.DB_HOST,  // ใช้จาก .env
-  user: process.env.DB_USER,  // ใช้จาก .env
-  password: process.env.DB_PASSWORD,  // ใช้จาก .env
-  database: process.env.DB_NAME  // ใช้จาก .env
+  host: 'localhost',
+  user: 'root',  // Replace with your MySQL username
+  password: '',  // Replace with your MySQL password
+  database: 'chat_app'
 });
 
 // Connect to the database
@@ -122,13 +121,12 @@ app.get('/information', (req, res) => {
     });
   });
   
-app.get('/get-hostname', (req, res) => {
+  app.get('/get-hostname', (req, res) => {
     const hostName = os.hostname(); // ดึงชื่อ Host ของเซิร์ฟเวอร์
     const userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // ดึง IP ของผู้ใช้
     res.json({ hostName, userIP });
   });
-
 // Start the server
-app.listen(port, '0.0.0.0', () => {
-  console.log(`Server is running on port ${port}`);
+app.listen(5000, '0.0.0.0', () => {
+  console.log('Server is running on port 5000');
 });
