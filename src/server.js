@@ -5,7 +5,7 @@ const os = require('os');
 
 // Initialize the express app
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000; // Use Render's PORT or fallback to 5000
 
 // Use middleware
 app.use(cors()); // Allow requests from any domain
@@ -13,10 +13,10 @@ app.use(express.json()); // Use built-in JSON parser (no need for body-parser)
 
 // Create MySQL connection
 const db = mysql.createConnection({
-  host: 'localhost', // Database host
-  user: 'root',      // MySQL username
-  password: '',      // MySQL password
-  database: 'chat_app' // Your database name
+  host: process.env.DB_HOST, // DB_HOST environment variable for MySQL host
+  user: process.env.DB_USER, // DB_USER environment variable for MySQL username
+  password: process.env.DB_PASSWORD, // DB_PASSWORD environment variable for MySQL password
+  database: process.env.DB_NAME // DB_NAME environment variable for MySQL database
 });
 
 // Connect to the database
