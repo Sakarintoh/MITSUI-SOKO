@@ -31,7 +31,7 @@ function App() {
       .catch((error) => console.error('Error fetching host name:', error));
 
     // ดึงข้อความแชท
-    fetch('http://localhost:5000/messages')
+    fetch('http://192.168.7.94:5000/messages')
       .then((response) => response.json())
       .then((data) => setMessages(data))
       .catch((error) => console.error('Error fetching messages:', error));
