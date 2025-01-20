@@ -23,7 +23,7 @@ function App() {
 
   useEffect(() => {
     // ดึงข้อมูล Host Name หรือ IP Address ของผู้ใช้
-    fetch('http://localhost/phpmyadmin/index.php?route=/database/structure&db=chat_appget-hostname')
+    fetch('http://localhost:5000/get-hostname')
       .then((response) => response.json())
       .then((data) => {
         setUsername(data.hostName || data.userIP || 'Unknown User'); // ใช้ Host Name หรือ IP
@@ -31,13 +31,13 @@ function App() {
       .catch((error) => console.error('Error fetching host name:', error));
 
     // ดึงข้อความแชท
-    fetch('http://localhost/phpmyadmin/index.php?route=/database/structure&db=chat_appmessages')
+    fetch('http://localhost:5000/messages')
       .then((response) => response.json())
       .then((data) => setMessages(data))
       .catch((error) => console.error('Error fetching messages:', error));
 
     // ดึงประกาศ
-    fetch('http://localhost/phpmyadmin/index.php?route=/database/structure&db=chat_appannouncement')
+    fetch('http://localhost:5000/announcement')
       .then((response) => response.json())
       .then((data) => {
         setAnnouncement({
