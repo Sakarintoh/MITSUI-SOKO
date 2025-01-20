@@ -2,11 +2,10 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 const os = require('os');
-require('dotenv').config();
 
 // Initialize the express app
 const app = express();
-const port = process.env.PORT || 5000; // Use Render's PORT or fallback to 5000
+const port = 5000;
 
 // Use middleware
 app.use(cors()); // Allow requests from any domain
@@ -14,10 +13,10 @@ app.use(express.json()); // Use built-in JSON parser (no need for body-parser)
 
 // Create MySQL connection
 const db = mysql.createConnection({
-  host: process.env.DB_HOST, // DB_HOST environment variable for MySQL host
-  user: process.env.DB_USER, // DB_USER environment variable for MySQL username
-  password: process.env.DB_PASSWORD, // DB_PASSWORD environment variable for MySQL password
-  database: process.env.DB_NAME // DB_NAME environment variable for MySQL database
+  host: 'localhost', // Database host
+  user: 'root',      // MySQL username
+  password: '',      // MySQL password
+  database: 'chat_app' // Your database name
 });
 
 // Connect to the database
