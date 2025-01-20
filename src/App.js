@@ -31,13 +31,13 @@ function App() {
       .catch((error) => console.error('Error fetching host name:', error));
 
     // ดึงข้อความแชท
-    fetch('http://localhost:5000/messages')
+    fetch('192.168.7.94:5000/messages')
       .then((response) => response.json())
       .then((data) => setMessages(data))
       .catch((error) => console.error('Error fetching messages:', error));
 
     // ดึงประกาศ
-    fetch('http://192.168.7.94:5000/announcement')
+    fetch('192.168.7.94:5000/announcement')
       .then((response) => response.json())
       .then((data) => {
         setAnnouncement({
@@ -49,7 +49,7 @@ function App() {
       .catch((error) => console.error('Error fetching announcement:', error));
 
     // ดึงข้อมูล
-    fetch('http://localhost:5000/information')
+    fetch('192.168.7.94:5000/information')
       .then((response) => response.json())
       .then((data) => {
         setInformation(data.text || 'No information available.');
