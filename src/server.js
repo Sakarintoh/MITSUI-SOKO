@@ -2,7 +2,6 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 const os = require('os');
-const WebSocket = require('ws');  // Import WebSocket
 
 // Initialize the express app
 const app = express();
@@ -16,7 +15,7 @@ app.use(express.json()); // Use built-in JSON parser (no need for body-parser)
 const db = mysql.createConnection({
   host: 'localhost', // Database host
   user: 'root',      // MySQL username
-  password: '12345678',      // MySQL password
+  password: '',      // MySQL password
   database: 'chat_app' // Your database name
 });
 
@@ -28,32 +27,6 @@ db.connect((err) => {
   }
   console.log('Connected to the MySQL database');
 });
-
-// Create a WebSocket server
-const wss = new WebSocket.Server({ noServer: true });
-
-// When a new client connects via WebSocket
-wss.on('connection', (ws) => {
-  console.log('A new WebSocket client connected');
-
-  // Send an initial message to the client if needed
-  ws.send(JSON.stringify({ type: 'info', message: 'Welcome to the WebSocket server!' }));
-
-  // Handle incoming messages from the client
-  ws.on('message', (message) => {
-    console.log('Received message:', message);
-    // Handle the message received from the client (you can implement more logic here)
-  });
-});
-
-// When there is a change in the database (new message, new announcement, etc.), notify all clients
-const notifyClients = (data) => {
-  wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify(data));
-    }
-  });
-};
 
 // Route to get all messages
 app.get('/messages', (req, res) => {
@@ -78,10 +51,6 @@ app.post('/messages', (req, res) => {
     if (err) {
       return res.status(500).send('Error inserting message');
     }
-
-    // Notify all connected WebSocket clients about the new message
-    notifyClients({ type: 'message', username, message });
-
     res.status(201).send('Message sent');
   });
 });
@@ -101,10 +70,6 @@ app.post('/api/save-announcement', (req, res) => {
     if (err) {
       return res.status(500).json({ success: false, message: 'Error saving announcement' });
     }
-
-    // Notify all connected WebSocket clients about the new announcement
-    notifyClients({ type: 'announcement', IT, GA, HR });
-
     res.json({ success: true, message: 'Announcement saved successfully' });
   });
 });
@@ -134,10 +99,6 @@ app.post('/api/save-information', (req, res) => {
     if (err) {
       return res.status(500).json({ success: false, message: 'Error saving information' });
     }
-
-    // Notify all connected WebSocket clients about the new information
-    notifyClients({ type: 'information', text: information });
-
     res.json({ success: true, message: 'Information saved successfully' });
   });
 });
@@ -153,21 +114,14 @@ app.get('/information', (req, res) => {
   });
 });
 
-// API to get Host Name or IP Address of the user
+// API to retrieve hostname and user IP
 app.get('/get-hostname', (req, res) => {
-  const userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // Get IP
-  const hostName = os.hostname(); // Hostname of the server (not user)
-
-  res.json({ userIP, hostName });
+  const hostName = os.hostname(); // Get the server's hostname
+  const userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // Get user's IP address
+  res.json({ hostName, userIP });
 });
 
-// Upgrade the HTTP server to support WebSockets
-app.server = app.listen(port, '0.0.0.0', () => {
+// Start the server
+app.listen(port, '0.0.0.0', () => {
   console.log(`Server is running on port ${port}`);
-});
-
-app.server.on('upgrade', (request, socket, head) => {
-  wss.handleUpgrade(request, socket, head, (ws) => {
-    wss.emit('connection', ws, request);
-  });
 });
