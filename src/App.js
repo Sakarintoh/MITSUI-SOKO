@@ -15,15 +15,13 @@ function App() {
   const [selectedAnnouncement, setSelectedAnnouncement] = useState('all');
 
   // ฟังก์ชันเพื่อเปลี่ยนแสดงข้อความตามหัวข้อที่เลือก
-
   const handleShowAnnouncement = (section) => {
     setSelectedAnnouncement(section);
   };
 
-
   useEffect(() => {
     // ดึงข้อมูล Host Name หรือ IP Address ของผู้ใช้
-    fetch('http://localhost:5000/get-hostname')
+    fetch('http://192.168.7.94:5000/get-hostname')
       .then((response) => response.json())
       .then((data) => {
         setUsername(data.hostName || data.userIP || 'Unknown User'); // ใช้ Host Name หรือ IP
@@ -31,13 +29,13 @@ function App() {
       .catch((error) => console.error('Error fetching host name:', error));
 
     // ดึงข้อความแชท
-    fetch('http://localhost:5000/messages')
+    fetch('http://192.168.7.94:5000/messages')
       .then((response) => response.json())
       .then((data) => setMessages(data))
       .catch((error) => console.error('Error fetching messages:', error));
 
     // ดึงประกาศ
-    fetch('http://localhost:5000/announcement')
+    fetch('http://192.168.7.94:5000/announcement')
       .then((response) => response.json())
       .then((data) => {
         setAnnouncement({
@@ -49,7 +47,7 @@ function App() {
       .catch((error) => console.error('Error fetching announcement:', error));
 
     // ดึงข้อมูล
-    fetch('http://localhost:5000/information')
+    fetch('http://192.168.7.94:5000/information')
       .then((response) => response.json())
       .then((data) => {
         setInformation(data.text || 'No information available.');
@@ -59,7 +57,7 @@ function App() {
 
   const sendMessage = () => {
     if (message.trim() !== '') {
-      fetch('http://localhost:5000/messages', {
+      fetch('http://192.168.7.94:5000/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, message }),
@@ -99,77 +97,66 @@ function App() {
       </header>
 
       <main>
-      <section id="section-2" className="section">
-      <h1>Announcement</h1>
-      <div className="buttons-section2">
-        {/* ปุ่มแยกแต่ละหัวข้อ */}
-        <button className="btn-section2" onClick={() => handleShowAnnouncement('all')}>
-        <img src="house.png" alt="logo" />
-        </button>
-        <button className="btn-section2" onClick={() => handleShowAnnouncement('IT')}>
-        <img src="it.png" alt="logo" />
-        </button>
-        <button className="btn-section2" onClick={() => handleShowAnnouncement('GA')}>
-        <img src="GA.png" alt="logo" />
-        </button>
-        <button className="btn-section2" onClick={() => handleShowAnnouncement('HR')}>
-        <img src="hr-manager.png" alt="logo" />
-        </button>
-      </div>
-      <div className="announcement-content">
-      <div className="annuoncement-box">
-        {/* แสดงข้อความทั้งหมด */}
-        {selectedAnnouncement === 'all' && (
-          <div>
-            <h2>IT</h2>
-            <p>{announcement.IT}</p>
-
-            <h2>GA</h2>
-            <p>{announcement.GA}</p>
-
-            <h2>HR</h2>
-            <p>{announcement.HR}</p>
+        <section id="section-2" className="section">
+          <h1>Announcement</h1>
+          <div className="buttons-section2">
+            {/* ปุ่มแยกแต่ละหัวข้อ */}
+            <button className="btn-section2" onClick={() => handleShowAnnouncement('all')}>
+              <img src="house.png" alt="logo" />
+            </button>
+            <button className="btn-section2" onClick={() => handleShowAnnouncement('IT')}>
+              <img src="it.png" alt="logo" />
+            </button>
+            <button className="btn-section2" onClick={() => handleShowAnnouncement('GA')}>
+              <img src="GA.png" alt="logo" />
+            </button>
+            <button className="btn-section2" onClick={() => handleShowAnnouncement('HR')}>
+              <img src="hr-manager.png" alt="logo" />
+            </button>
           </div>
-        )}
-         {/* แสดงข้อความทั้งหมด */}
-        {selectedAnnouncement === 'all' && (
-          <div>
-            <p>{announcement.all}</p>
+          <div className="announcement-content">
+            <div className="announcement-box">
+              {/* แสดงข้อความตามหัวข้อที่เลือก */}
+              {selectedAnnouncement === 'all' && (
+                <div>
+                  <h2>IT</h2>
+                  <p>{announcement.IT}</p>
+                  <h2>GA</h2>
+                  <p>{announcement.GA}</p>
+                  <h2>HR</h2>
+                  <p>{announcement.HR}</p>
+                </div>
+              )}
+              {selectedAnnouncement === 'IT' && (
+                <div>
+                  <h2>IT</h2>
+                  <p>{announcement.IT}</p>
+                </div>
+              )}
+              {selectedAnnouncement === 'GA' && (
+                <div>
+                  <h2>GA</h2>
+                  <p>{announcement.GA}</p>
+                </div>
+              )}
+              {selectedAnnouncement === 'HR' && (
+                <div>
+                  <h2>HR</h2>
+                  <p>{announcement.HR}</p>
+                </div>
+              )}
+            </div>
           </div>
-        )}
-          {/* แสดงข้อความ IT */}
-        {selectedAnnouncement === 'IT' && (
-          <div>
-            <h2>IT</h2>
-            <p>{announcement.IT}</p>
-          </div>
-        )}
-          {/* แสดงข้อความ GA */}
-        {selectedAnnouncement === 'GA' && (
-          <div>
-            <h2>GA</h2>
-            <p>{announcement.GA}</p>
-          </div>
-        )}
-          {/* แสดงข้อความ HR */}
-        {selectedAnnouncement === 'HR' && (
-          <div>
-            <h2>HR</h2>
-            <p>{announcement.HR}</p>
-          </div>
-        )}
-      </div>
-      </div>
-    </section>
+        </section>
 
         <section id="section-3" className="section">
           <h1>Information
           <img src="idea.png" alt="Logo" className="info-logo" />
           </h1>
           <div className="information-content">
-          <div className="information-box">
-            <p>{information || 'No information available.'}</p>
-          </div>
+            <div className="information-box">
+              <p>{information || 'No information available.'}</p>
+            </div>
           </div>
         </section>
 
